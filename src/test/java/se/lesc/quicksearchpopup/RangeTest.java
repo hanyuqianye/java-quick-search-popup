@@ -1,4 +1,4 @@
-package se.lesc.swing.quicktextsearch;
+package se.lesc.quicksearchpopup;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;

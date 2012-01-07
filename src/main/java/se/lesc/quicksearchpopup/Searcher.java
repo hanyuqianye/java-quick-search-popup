@@ -1,4 +1,4 @@
-package se.lesc.swing.quicktextsearch;
+package se.lesc.quicksearchpopup;
 
 /**
  * Text matching algorithm used to search many rows using a single search string. 

@@ -1,4 +1,4 @@
-package se.lesc.swting.quicktextsearch.example;
+package se.lesc.quicksearchpopup.example;
 
 import java.awt.Font;
 import java.io.FileInputStream;
@@ -15,8 +15,8 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-import se.lesc.swing.quicktextsearch.QuickSearcher;
-import se.lesc.swing.quicktextsearch.SelectionListener;
+import se.lesc.quicksearchpopup.QuickSearcher;
+import se.lesc.quicksearchpopup.SelectionListener;
 
 public class Example extends JFrame implements SelectionListener {
 

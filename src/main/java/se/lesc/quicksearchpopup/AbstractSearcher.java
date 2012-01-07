@@ -1,4 +1,4 @@
-package se.lesc.swing.quicktextsearch;
+package se.lesc.quicksearchpopup;
 
 import java.util.ArrayList;
 import java.util.Collections;

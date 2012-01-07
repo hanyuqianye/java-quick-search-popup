@@ -1,4 +1,4 @@
-package se.lesc.swing.quicktextsearch;
+package se.lesc.quicksearchpopup;
 
 class Range implements Comparable<Range> {
 	final int from;

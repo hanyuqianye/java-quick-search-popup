@@ -1,4 +1,4 @@
-package se.lesc.swing.quicktextsearch;
+package se.lesc.quicksearchpopup;
 
 import java.awt.AWTEvent;
 import java.awt.Component;
