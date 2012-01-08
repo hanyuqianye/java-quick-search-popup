@@ -2,6 +2,9 @@
 
 	<property name="target" location="target"/>
 
+	<property name="publications.dir" location="${target}/publications"/>
+	<property name="artifact.main.name" value="${ant.project.name}" />
+
 	<property name="target.lib.dir" location="${target}/lib"/>
 	<property name="ivy.retrieve.pattern" value="${target.lib.dir}/[conf]/[artifact]-[revision].[ext]"/>
 
@@ -61,6 +64,20 @@
 	</target>
 
 	<target name="package" depends="compile" description="Builds every artifact (jar file etc)">
+		<mkdir dir="${publications.dir}" />
+
+		<jar destfile="${publications.dir}/${artifact.main.name}-${ivy.revision}.jar" basedir="${classes.main}">
+			<include name="**/*.class" />
+		</jar>
+
+		<jar destfile="${publications.dir}/${artifact.main.name}-${ivy.revision}-sources.jar" basedir="${src.main}">
+			<fileset dir="${src.main}" />
+			<fileset dir="${src.example}" />
+		</jar>
+
+		<jar destfile="${publications.dir}/${artifact.main.name}-${ivy.revision}-examples.jar" basedir="${classes.example}">
+			<include name="**/*.class" />
+		</jar>
 	</target>
 
 	<target name="clean" description="Removes everything this projects builds">
