@@ -1,13 +1,14 @@
 package se.lesc.quicksearchpopup.example;
 
+import static javax.swing.GroupLayout.DEFAULT_SIZE;
+import static javax.swing.GroupLayout.PREFERRED_SIZE;
+import static javax.swing.LayoutStyle.ComponentPlacement.RELATED;
+
 import java.awt.Font;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
 import javax.swing.GroupLayout;
-import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
@@ -18,82 +19,123 @@ import javax.swing.SwingUtilities;
 import se.lesc.quicksearchpopup.QuickSearcher;
 import se.lesc.quicksearchpopup.SelectionListener;
 
+/**
+ * Example application the shows how the Quick Search Popup works. 
+ */
+@SuppressWarnings("serial")
 public class Example extends JFrame implements SelectionListener {
 
 	private GroupLayout layout = new GroupLayout(this.getContentPane());
-	private JTextField quickSearchTestField; 
+
 	
+	private JLabel rowsToSearchLabel;
+	private JTextArea rowsToSearch;
+	private JScrollPane rowsToSearchScrollsPane;
+		
+	private JLabel quickSearchLabel;
+	private JTextField quickSearchField; 
+	private QuickSearcher quickSearcher;
+	
+	private JLabel addedRowsLabel;
 	private JTextArea addedRows;
-	
-	private QuickSearcher quickSearecher;
-	private String[] rows;
 	private JScrollPane addedRowsScrollsPane;
 
+	private String[] rows;
+
 	public Example() throws IOException {
-		super("java-quick-search-popup");
+		super("java-quick-search-popup example");
 		
-		addedRows = new JTextArea(10, 100);
-		addedRowsScrollsPane = new JScrollPane(addedRows);
-		
+		initComponents();
+		setRowsToSearch();
 		initLayout();
 		pack();
-		setLocationRelativeTo(null);
-
-		quickSearchTestField.setToolTipText("Write search word, separated with spaces");
-		quickSearchTestField.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 13));
-
-		quickSearecher = new QuickSearcher(quickSearchTestField, this);
-		
-
-		
-		String exampleData = getExampleData();
-		rows = exampleData.split("\n");
-
-//		String firstRow = rows[1];
-//		rows = new String[1];
-//		rows[0] = firstRow;
-		quickSearecher.setSearchRows(rows);
+		setLocationRelativeTo(null); //Center on screen
 	}
 
-	private String getExampleData() throws IOException {
-		InputStream in = getClass().getResourceAsStream("example_jstack.txt");
-		int ch;
-		StringBuffer sb = new StringBuffer();
-		while ((ch = in.read()) != -1) {
-			sb.append((char) ch);
+	private void initComponents() {
+		rowsToSearchLabel = new JLabel("Rows to search:");
+		rowsToSearch = new JTextArea(10, 80);
+		rowsToSearch.setEditable(false);
+		rowsToSearchScrollsPane = new JScrollPane(rowsToSearch);
+
+		quickSearchLabel = new JLabel("Quick Search:");
+		quickSearchField = new JTextField(15);
+		quickSearchField.setToolTipText("Write search word, separated with spaces");
+//		quickSearchField.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 13));
+
+		quickSearcher = new QuickSearcher(quickSearchField, this);
+		
+		addedRowsLabel = new JLabel("Selected rows:");
+		addedRows = new JTextArea(10, 80);
+		addedRowsScrollsPane = new JScrollPane(addedRows);
+	}
+	
+	private void setRowsToSearch() {
+		String exampleData = getExampleData();
+		rows = exampleData.split("\n");
+		
+		quickSearcher.setSearchRows(rows);
+		rowsToSearch.setText(exampleData);
+		rowsToSearch.setCaretPosition(0);
+	}
+
+	private String getExampleData() {
+		try {
+			InputStream in = getClass().getResourceAsStream("example_jstack.txt");
+			int ch;
+			StringBuffer sb = new StringBuffer();
+
+			while ((ch = in.read()) != -1) {
+				sb.append((char) ch);
+			}
+
+			String exampleData = sb.toString();
+			return exampleData;
+
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		String exampleData = sb.toString();
-		return exampleData;
+		return "";
 	}
 
 	private void initLayout() {
 		this.getContentPane().removeAll();
 		this.getContentPane().setLayout(layout);
 
-		JLabel helloLabel = new JLabel("Hello!");
-		quickSearchTestField = new JTextField(15);
+		layout.setAutoCreateContainerGaps(true);
 		
-		JCheckBox checkbox1 = new JCheckBox("This is checkbox 1");
-		
-		JCheckBox checkbox2 = new JCheckBox("This is checkbox 2");
-
 		layout.setVerticalGroup(layout.createSequentialGroup()
-				.addComponent(checkbox1)
-				.addComponent(helloLabel)
-				.addComponent(quickSearchTestField)
-				.addComponent(checkbox2)
-				.addComponent(addedRowsScrollsPane)
+				.addGroup(layout.createSequentialGroup()
+						.addComponent(rowsToSearchLabel)
+						.addComponent(rowsToSearchScrollsPane)
+				)
+				.addPreferredGap(RELATED)				
+				.addGroup(layout.createSequentialGroup()
+						.addComponent(quickSearchLabel)						
+						.addComponent(quickSearchField, DEFAULT_SIZE, DEFAULT_SIZE, PREFERRED_SIZE)
+				)
+				.addPreferredGap(RELATED)
+				.addGroup(layout.createSequentialGroup()
+						.addComponent(addedRowsLabel)
+						.addComponent(addedRowsScrollsPane)
+				)
 		);
 
 		layout.setHorizontalGroup(layout.createParallelGroup()
-				.addComponent(checkbox1)
-				.addComponent(helloLabel)
-				.addComponent(quickSearchTestField)
-				.addComponent(checkbox2)
-				.addComponent(addedRowsScrollsPane)			
+				.addGroup(layout.createParallelGroup()
+						.addComponent(rowsToSearchLabel)
+						.addComponent(rowsToSearchScrollsPane)
+				)				
+				.addGroup(layout.createParallelGroup()
+						.addComponent(quickSearchLabel)
+						.addComponent(quickSearchField)
+				)
+				.addGroup(layout.createParallelGroup()
+						.addComponent(addedRowsLabel)
+						.addComponent(addedRowsScrollsPane)
+				)
 		);
 	}
-
 
 	public static void main(String args[]) {
 		SwingUtilities.invokeLater(new Runnable() {
@@ -112,8 +154,7 @@ public class Example extends JFrame implements SelectionListener {
 
 	@Override
 	public void add(String row) {
-		
 		addedRows.setText(addedRows.getText() + row + "\n");
 	}
-
 }
+

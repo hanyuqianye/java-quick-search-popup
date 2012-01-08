@@ -1,18 +1,16 @@
 package se.lesc.quicksearchpopup;
 
 import java.awt.AWTEvent;
-import java.awt.Component;
-import java.awt.Font;
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.DefaultListCellRenderer;
+import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.GroupLayout;
 import javax.swing.JButton;
@@ -79,6 +77,9 @@ public class QuickSearcherList extends JPanel {
 				.addComponent(listScrollPane)
 				.addComponent(addButton)				
 		);
+		
+		setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.BLACK),
+				BorderFactory.createEmptyBorder(1, 1, 1, 1)));
 	}
 	
 	@Override
