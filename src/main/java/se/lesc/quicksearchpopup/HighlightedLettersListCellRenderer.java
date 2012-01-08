@@ -20,9 +20,7 @@ public class HighlightedLettersListCellRenderer implements ListCellRenderer {
    
     /**
      * @param originalRenderer the renderer used in the original JList  
-     * @param searchString The current text the user has written
      * @param itemMatcher matcher used to highlight the letters
-
      */
     public HighlightedLettersListCellRenderer(ListCellRenderer originalRenderer, Searcher searcher) {
         this.originalRenderer = originalRenderer;
@@ -56,9 +54,9 @@ public class HighlightedLettersListCellRenderer implements ListCellRenderer {
             	int matchStart = match[0];
             	int matchEnd = match[1];
             	
-            	if (previousMatchEnd < 0 || matchStart < 0 || matchStart < previousMatchEnd) {
-            		System.out.println("Error"); //TODO: remove
-            	}
+//            	if (previousMatchEnd < 0 || matchStart < 0 || matchStart < previousMatchEnd) {
+//            		System.out.println("Error"); //TODO: remove
+//            	}
             	
             	sb.append(row.substring(previousMatchEnd, matchStart));
             	sb.append("<b>");

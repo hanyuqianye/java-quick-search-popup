@@ -8,6 +8,4 @@ public interface Searcher {
 	boolean matches(String searchString, String matchCanditate);
 	
 	int[][] matchArea(String searchString, String matchCanditate);
-	
-
 }

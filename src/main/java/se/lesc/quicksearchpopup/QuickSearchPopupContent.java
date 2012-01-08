@@ -20,7 +20,7 @@ import javax.swing.JScrollPane;
 import javax.swing.text.JTextComponent;
 
 @SuppressWarnings("serial")
-public class QuickSearcherList extends JPanel {
+public class QuickSearchPopupContent extends JPanel {
 
 	protected DefaultListModel listModel;
 	protected JList list;
@@ -31,7 +31,7 @@ public class QuickSearcherList extends JPanel {
 	private HighlightedLettersListCellRenderer cellRenderer;
 	private SelectionListener selectionListener;
 
-	public QuickSearcherList(JTextComponent searchField, Searcher searcher, SelectionListener selectionListener) {
+	public QuickSearchPopupContent(JTextComponent searchField, Searcher searcher, SelectionListener selectionListener) {
 		this.searchField = searchField;
 		this.searcher = searcher;
 		this.selectionListener = selectionListener;

@@ -16,7 +16,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-import se.lesc.quicksearchpopup.QuickSearcher;
+import se.lesc.quicksearchpopup.QuickSearchPopup;
 import se.lesc.quicksearchpopup.SelectionListener;
 
 /**
@@ -34,7 +34,7 @@ public class Example extends JFrame implements SelectionListener {
 		
 	private JLabel quickSearchLabel;
 	private JTextField quickSearchField; 
-	private QuickSearcher quickSearcher;
+	private QuickSearchPopup quickSearcher;
 	
 	private JLabel addedRowsLabel;
 	private JTextArea addedRows;
@@ -63,7 +63,7 @@ public class Example extends JFrame implements SelectionListener {
 		quickSearchField.setToolTipText("Write search word, separated with spaces");
 //		quickSearchField.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 13));
 
-		quickSearcher = new QuickSearcher(quickSearchField, this);
+		quickSearcher = new QuickSearchPopup(quickSearchField, this);
 		
 		addedRowsLabel = new JLabel("Selected rows:");
 		addedRows = new JTextArea(10, 80);

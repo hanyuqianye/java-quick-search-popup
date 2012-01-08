@@ -9,9 +9,8 @@ class Range implements Comparable<Range> {
 		this.to = to;
 	}
 
-	/** Joins to ranges. Should only be called if the ranges intersects */
+	/** Joins two ranges. Should only be called if the ranges intersects */
 	static Range join(Range a1, Range a2) {
-
 		int lowerBounds = Math.min(a1.from, a2.from);
 		int upperBounds = Math.max(a1.to, a2.to);
 

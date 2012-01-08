@@ -19,18 +19,18 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.JTextComponent;
 
-public class QuickSearcher implements SelectionListener {
+public class QuickSearchPopup implements SelectionListener {
 
 	private JTextComponent searchField;
 	private PopupFactory factory;
 	private String[] rows;
 	private Searcher searcher;
 	private Popup popup;
-	private QuickSearcherList quickSearcherList;
+	private QuickSearchPopupContent quickSearcherList;
 	private GlobalEventListener eventListener;
 	private SelectionListener parentSelectionListener;
 
-	public QuickSearcher(JTextComponent searchField, SelectionListener selectionListener) {
+	public QuickSearchPopup(JTextComponent searchField, SelectionListener selectionListener) {
 		this.searchField = searchField;
 		this.parentSelectionListener = selectionListener;
 		factory = PopupFactory.getSharedInstance();
@@ -111,7 +111,7 @@ public class QuickSearcher implements SelectionListener {
 	}
 
 	private void createComponents() {
-		quickSearcherList = new QuickSearcherList(searchField, searcher, this);
+		quickSearcherList = new QuickSearchPopupContent(searchField, searcher, this);
 	}
 
 	private Popup createPopup() {
@@ -275,7 +275,7 @@ public class QuickSearcher implements SelectionListener {
 			for (Component c=src; c!=null; c=c.getParent()) {
 				if (c instanceof Applet || c instanceof Window) {
 					break;
-				} else if (c instanceof QuickSearcherList) {
+				} else if (c instanceof QuickSearchPopupContent) {
 					return true;
 				}
 			}
