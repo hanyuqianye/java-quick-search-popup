@@ -18,7 +18,14 @@
 		<conf name="example" visibility="public" description="Needed to compile and run the example application" extends="runtime,master"/>
 	</configurations>
 
+	<publications>
+		<artifact name="quicksearchpopup" type="jar" ext="jar" conf="master"/>
+		<artifact name="quicksearchpopup" type="source" ext="jar" conf="sources"/>
+	</publications>
+
 	<dependencies>
+
+		<!-- Test depencencies -->
 		<dependency org="junit" name="junit" rev="4.10" conf="test->master"/>
 	</dependencies>
 </ivy-module>

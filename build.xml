@@ -1,0 +1,70 @@
+<project name="quicksearchpopup" default="package" xmlns:ivy="antlib:org.apache.ivy.ant">
+
+	<property name="target" location="target"/>
+
+	<property name="target.lib.dir" location="${target}/lib"/>
+	<property name="ivy.retrieve.pattern" value="${target.lib.dir}/[conf]/[artifact]-[revision].[ext]"/>
+
+	<property name="src.main" location="src/main/java"/>
+	<property name="classes.main" location="${target}/classes"/>
+	<path id="classpath.main">
+		<pathelement path="${classes.main}" />
+		<fileset dir="${target.lib.dir}/compile" includes="*.jar" erroronmissingdir="false" />
+	</path>
+
+	<property name="src.example" location="src/example/java"/>
+	<property name="classes.example" location="${target}/example-classes"/>
+	<path id="classpath.example">
+		<path refid="classpath.main"/>
+		<pathelement path="${classes.example}" />
+		<fileset dir="${target.lib.dir}/example" includes="*.jar" erroronmissingdir="false" />
+	</path>
+
+	<property name="src.test" location="src/test/java"/>
+	<property name="classes.test" location="${target}/test-classes"/>
+	<path id="classpath.test">
+		<path refid="classpath.main"/>
+		<pathelement path="${classes.test}" />
+		<fileset dir="${target.lib.dir}/test" includes="*.jar" erroronmissingdir="false" />
+	</path>
+
+	<target name="resolve" description="Fetches dependencies via Ivy">
+		<ivy:configure />
+		<ivy:resolve file="${ivy.dep.file}" conf="${ivy.configurations}" />
+		<ivy:retrieve pattern="${ivy.retrieve.pattern}" conf="${ivy.configurations}" />
+	</target>
+
+	<target name="compile" depends="resolve" description="compile the source">
+		<antcall target="compile_" >
+			<param name="param.src" value="${src.main}"/>
+			<param name="param.classes" value="${classes.main}"/>
+			<param name="param.classpath" value="classpath.main"/>
+		</antcall>
+
+		<antcall target="compile_" >
+			<param name="param.src" value="${src.test}"/>
+			<param name="param.classes" value="${classes.test}"/>
+			<param name="param.classpath" value="classpath.test"/>
+		</antcall>
+
+		<antcall target="compile_" >
+			<param name="param.src" value="${src.example}"/>
+			<param name="param.classes" value="${classes.example}"/>
+			<param name="param.classpath" value="classpath.example"/>
+		</antcall>
+	</target>
+
+	<target name="compile_" >
+		<mkdir dir="${param.classes}"/>
+		<javac debug="true" srcdir="${param.src}" destdir="${param.classes}" encoding="UTF-8" 
+			includeAntRuntime="false" classpathref="${param.classpath}"/>
+	</target>
+
+	<target name="package" depends="compile" description="Builds every artifact (jar file etc)">
+	</target>
+
+	<target name="clean" description="Removes everything this projects builds">
+		<delete dir="${target}" />
+	</target>
+	
+</project>
