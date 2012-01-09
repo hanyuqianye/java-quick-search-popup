@@ -95,19 +95,18 @@ public class QuickSearchPopup implements SelectionListener {
 			hidePopup();
 			return;
 		}
-		
-		ArrayList<String> matchedRows = new ArrayList<String>();
-		
-		
-		
-		for (String row : rows) {
-			if (searcher.matches(searchString, row)) {
-				matchedRows.add(row);
-			}
-		}
 
-		quickSearcherList.setElements(searcher, searchString, matchedRows);
-		show();
+		if (rows != null && rows.length > 0) {
+    		ArrayList<String> matchedRows = new ArrayList<String>();
+    		for (String row : rows) {
+    			if (searcher.matches(searchString, row)) {
+    				matchedRows.add(row);
+    			}
+    		}
+    
+    		quickSearcherList.setElements(searcher, searchString, matchedRows);
+    		show();
+		}
 	}
 
 	private void createComponents() {
@@ -285,8 +284,8 @@ public class QuickSearchPopup implements SelectionListener {
 	}
 
 	@Override
-	public void add(String row) {
-		parentSelectionListener.add(row);
+	public void rowSelected(String row) {
+		parentSelectionListener.rowSelected(row);
 		hidePopup();
 		
 	}

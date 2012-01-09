@@ -153,7 +153,7 @@ public class Example extends JFrame implements SelectionListener {
 	}
 
 	@Override
-	public void add(String row) {
+	public void rowSelected(String row) {
 		addedRows.setText(addedRows.getText() + row + "\n");
 	}
 }

@@ -97,7 +97,7 @@ public class QuickSearchPopupContent extends JPanel {
 	
 	protected void addSelected() {
 		String selectedRow = (String) list.getSelectedValue();
-		selectionListener.add(selectedRow);
+		selectionListener.rowSelected(selectedRow);
 	}
 
 	public void setElements(Searcher searcher, String searchString, List<String> rows) {
