@@ -17,6 +17,7 @@ public class HighlightedLettersListCellRenderer implements ListCellRenderer {
     private String searchString;
     private ListCellRenderer originalRenderer;
     private Searcher searcher;
+	private boolean quickRenderMode = false;
    
     /**
      * @param originalRenderer the renderer used in the original JList  
@@ -33,11 +34,19 @@ public class HighlightedLettersListCellRenderer implements ListCellRenderer {
 		this.searchString = searchString;
 	}
     
+	public void setQuickRenderMode(boolean quickRenderMode) {
+		this.quickRenderMode = quickRenderMode;
+	}
+	
     @Override
     public Component getListCellRendererComponent(JList list, Object value, int index,
         boolean isSelected, boolean cellHasFocus) {
         Component component = originalRenderer.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
+        if (quickRenderMode) {
+        	return component;
+        }
+        
         String row = value.toString();
         
         int[][] matches = searcher.matchArea(searchString, row);

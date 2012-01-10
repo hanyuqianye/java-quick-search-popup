@@ -26,7 +26,7 @@ public class QuickSearchPopup implements SelectionListener {
 	private String[] rows;
 	private Searcher searcher;
 	private Popup popup;
-	private QuickSearchPopupContent quickSearcherList;
+	private QuickSearchPopupContent quickSearchPopupContent;
 	private GlobalEventListener eventListener;
 	private SelectionListener parentSelectionListener;
 
@@ -82,7 +82,7 @@ public class QuickSearchPopup implements SelectionListener {
 			hidePopup();
 		} else if (keyCode == KeyEvent.VK_ENTER || keyCode == KeyEvent.VK_DOWN || keyCode == KeyEvent.VK_UP
 				|| keyCode == KeyEvent.VK_PAGE_DOWN || keyCode == KeyEvent.VK_PAGE_UP) {
-			quickSearcherList.dispatchEvent(e);
+			quickSearchPopupContent.dispatchEvent(e);
 		}
 	}
 
@@ -104,13 +104,14 @@ public class QuickSearchPopup implements SelectionListener {
     			}
     		}
     
-    		quickSearcherList.setElements(searcher, searchString, matchedRows);
+    		quickSearchPopupContent.setElements(searcher, searchString, matchedRows);
+    		quickSearchPopupContent.calculateSizes();
     		show();
 		}
 	}
 
 	private void createComponents() {
-		quickSearcherList = new QuickSearchPopupContent(searchField, searcher, this);
+		quickSearchPopupContent = new QuickSearchPopupContent(searchField, searcher, this);
 	}
 
 	private Popup createPopup() {
@@ -120,8 +121,12 @@ public class QuickSearchPopup implements SelectionListener {
 		int y = locationOnScreen.y + searchField.getHeight();
 
 //		System.out.println(x + ", " + y);
-		Popup popup = factory.getPopup(searchField, quickSearcherList, x, y);
+		Popup popup = factory.getPopup(searchField, quickSearchPopupContent, x, y);
 
+//		quickSearchPopupContent.setMaximumSize(new Dimension(
+//				searchField.getSize().width,
+//						quickSearchPopupContent.getPreferredSize().height));
+		
 		eventListener.registerForEvents();
 
 		//		quickSearcherList.addFocusListener(new FocusListener() {

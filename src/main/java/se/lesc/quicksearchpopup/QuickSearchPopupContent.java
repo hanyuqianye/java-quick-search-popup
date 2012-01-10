@@ -2,6 +2,8 @@ package se.lesc.quicksearchpopup;
 
 import java.awt.AWTEvent;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -19,6 +21,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.text.JTextComponent;
 
+//import static javax.swing.GroupLayout.DEFAULT_SIZE;
+
 @SuppressWarnings("serial")
 public class QuickSearchPopupContent extends JPanel {
 
@@ -30,6 +34,7 @@ public class QuickSearchPopupContent extends JPanel {
 	protected Searcher searcher;
 	private HighlightedLettersListCellRenderer cellRenderer;
 	private SelectionListener selectionListener;
+	private String searchString;
 
 	public QuickSearchPopupContent(JTextComponent searchField, Searcher searcher, SelectionListener selectionListener) {
 		this.searchField = searchField;
@@ -105,13 +110,40 @@ public class QuickSearchPopupContent extends JPanel {
 		for (String row : rows) {
 			listModel.addElement(row);
 		}
-
+		
+		this.searchString = searchString;
 		cellRenderer.setSearchString(searchString);
 		
-        //Increase speed of the list rendered (avoid size calculation on every cell)
-		if (rows.size() > 0) {
-			list.setPrototypeCellValue(rows.get(0));
+//        //Increase speed of the list rendered (avoid size calculation on every cell)
+//		if (rows.size() > 0) {
+//			list.setPrototypeCellValue(rows.get(0));
+//		}
+	}
+
+	/** Calculates the preferred sizes */
+	public void calculateSizes() {
+		
+		cellRenderer.setQuickRenderMode(true);
+		int maxCellWidth = 0; 
+		int maxCellHeigth = 0; 
+		
+		for (int i = 0; i < listModel.getSize(); i++) {
+			String row = (String) listModel.get(i);
+	        Component c = cellRenderer.getListCellRendererComponent(list, row, i, false, false);
+	        Dimension cellSize = c.getPreferredSize();
+	        maxCellWidth = Math.max(cellSize.width, maxCellWidth);
+	        maxCellHeigth = Math.max(cellSize.height, maxCellHeigth);
 		}
+
+        
+        //Add an approximate value for the bold font
+        maxCellWidth += (int) (searchString.length() * 0.3);
+        
+        list.setFixedCellHeight(maxCellHeigth);
+        list.setFixedCellWidth(maxCellWidth);
+        cellRenderer.setQuickRenderMode(false);
+        
+        listScrollPane.setMaximumSize(new Dimension(searchField.getSize().width, listScrollPane.getMaximumSize().height));
 	}
 
 }
