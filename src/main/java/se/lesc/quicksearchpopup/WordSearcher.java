@@ -11,15 +11,27 @@ import java.util.regex.Pattern;
 public class WordSearcher extends AbstractSearcher implements Searcher {
 
 	private boolean caseSensitive;
-
-	@Override
-	public boolean matches(String searchString, String matchCanditate) {
-		return matchArea(searchString, matchCanditate) != null;
-	}
-
 	
 	public void setCaseSensitive(boolean caseSensitive) {
 		this.caseSensitive = caseSensitive;
+	}
+	
+	@Override
+	public boolean matches(String searchString, String matchCanditate) {
+//		return matchArea(searchString, matchCanditate) != null;
+		
+		if (! caseSensitive) {
+			searchString = searchString.toLowerCase();
+			matchCanditate = matchCanditate.toLowerCase();
+		}
+		String[] words = searchString.split(" ");
+
+		for (String word : words) {
+			if (! matchCanditate.contains(word)) {
+				return false;
+			}
+		}
+		return true;
 	}
 	
 	@Override
