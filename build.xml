@@ -64,13 +64,14 @@
 	</target>
 
 	<target name="package" depends="compile" description="Builds every artifact (jar file etc)">
+		<delete dir="${publications.dir}" />
 		<mkdir dir="${publications.dir}" />
 
 		<jar destfile="${publications.dir}/${artifact.main.name}-${ivy.revision}.jar" basedir="${classes.main}">
 			<include name="**/*.class" />
 		</jar>
 
-		<jar destfile="${publications.dir}/${artifact.main.name}-${ivy.revision}-sources.jar" basedir="${src.main}">
+		<jar destfile="${publications.dir}/${artifact.main.name}-${ivy.revision}-sources.jar">
 			<fileset dir="${src.main}" />
 			<fileset dir="${src.example}" />
 		</jar>
@@ -78,6 +79,13 @@
 		<jar destfile="${publications.dir}/${artifact.main.name}-${ivy.revision}-examples.jar" basedir="${classes.example}">
 			<include name="**/*.class" />
 		</jar>
+	</target>
+	
+	<target name="sign" depends="package" description="Sign the artifacts">
+		<mkdir dir="${publications.dir}/signed" />
+		<signjar destDir="${publications.dir}/signed" alias="mykey" storepass="lennart">
+			<fileset dir="${publications.dir}" includes="*.jar" />
+		</signjar>
 	</target>
 
 	<target name="clean" description="Removes everything this projects builds">
