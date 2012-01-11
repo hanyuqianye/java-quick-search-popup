@@ -68,7 +68,6 @@
 		<mkdir dir="${publications.dir}" />
 
 		<jar destfile="${publications.dir}/${artifact.main.name}-${ivy.revision}.jar" basedir="${classes.main}">
-			<include name="**/*.class" />
 		</jar>
 
 		<jar destfile="${publications.dir}/${artifact.main.name}-${ivy.revision}-sources.jar">
@@ -77,7 +76,6 @@
 		</jar>
 
 		<jar destfile="${publications.dir}/${artifact.main.name}-${ivy.revision}-examples.jar" basedir="${classes.example}">
-			<include name="**/*.class" />
 		</jar>
 	</target>
 	

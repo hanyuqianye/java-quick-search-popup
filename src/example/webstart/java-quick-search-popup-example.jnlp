@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<jnlp spec="1.0+">
+  <information>
+    <title>java-quick-search-popup example</title>
+    <vendor>Lennart Schedin</vendor>
+    <homepage>http://code.google.com/p/java-quick-search-popup/</homepage>
+    <description></description>
+  </information>
+  <offline-allowed/>
+  <security>
+    <!-- <j2ee-application-client-permissions/> -->
+  </security>
+  <resources>
+    <j2se version="1.6+" />
+    <jar href="quicksearchpopup-0.0.1.jar" />
+    <jar href="quicksearchpopup-0.0.1-examples.jar" />
+  </resources>
+  <application-desc main-class="se.lesc.quicksearchpopup.example.Example" />
+</jnlp>
