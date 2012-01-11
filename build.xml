@@ -55,6 +55,9 @@
 			<param name="param.classes" value="${classes.example}"/>
 			<param name="param.classpath" value="classpath.example"/>
 		</antcall>
+		<copy todir="${classes.example}">
+			<fileset dir="${src.example}" excludes="**/*.java" />
+		</copy>
 	</target>
 
 	<target name="compile_" >
