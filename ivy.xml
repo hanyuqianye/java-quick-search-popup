@@ -1,5 +1,5 @@
 <ivy-module version="2.0">
-	<info organisation="se.lesc" module="quicksearchpopup" revision="0.0.1" />
+	<info organisation="se.lesc" module="quicksearchpopup" revision="0.1.0" />
 
 	<configurations>
 		<!-- Default configuration from the Maven to Ivy converter -->
