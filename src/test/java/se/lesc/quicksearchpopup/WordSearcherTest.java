@@ -70,4 +70,10 @@ public class WordSearcherTest {
 		 assertEquals(1, matches.length); //Since "ohn" is part of "John" it should be the same match
 	}
 	
+	
+	@Test
+	public void testSpaceShouldNotMatch() {
+		assertFalse(searcher.matches("  ", JOHN_TO_MOVIE));
+	}
+	
 }

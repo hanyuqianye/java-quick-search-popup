@@ -25,6 +25,10 @@ public class WordSearcher extends AbstractSearcher implements Searcher {
 			matchCanditate = matchCanditate.toLowerCase();
 		}
 		String[] words = searchString.split(" ");
+		
+		if (words.length == 0) {
+			return false;
+		}
 
 		for (String word : words) {
 			if (! matchCanditate.contains(word)) {
