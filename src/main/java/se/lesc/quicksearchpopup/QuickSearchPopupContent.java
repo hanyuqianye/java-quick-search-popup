@@ -143,7 +143,12 @@ public class QuickSearchPopupContent extends JPanel {
         list.setFixedCellWidth(maxCellWidth);
         cellRenderer.setQuickRenderMode(false);
         
-        listScrollPane.setMaximumSize(new Dimension(searchField.getSize().width, listScrollPane.getMaximumSize().height));
+
+        //Fixing so that the popup is equal the width of the text search field
+        int parentComponentWidth = searchField.getSize().width;
+        setPreferredSize(new Dimension(parentComponentWidth, getPreferredSize().height));
+        
+        
 	}
 
 }
