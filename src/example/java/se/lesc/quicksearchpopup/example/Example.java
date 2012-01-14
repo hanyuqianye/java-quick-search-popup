@@ -18,6 +18,7 @@ import javax.swing.SwingUtilities;
 
 import se.lesc.quicksearchpopup.QuickSearchPopup;
 import se.lesc.quicksearchpopup.SelectionListener;
+import se.lesc.quicksearchpopup.renderer.MatchRenderer;
 
 /**
  * Example application the shows how the Quick Search Popup works. 
@@ -40,6 +41,7 @@ public class Example extends JFrame implements SelectionListener {
 	private JScrollPane addedRowsScrollsPane;
 	
 	private FontChooser fontChooser;
+	private MatchRendererChooser highlighterChooser;
 
 	private String[] rows;
 
@@ -76,6 +78,14 @@ public class Example extends JFrame implements SelectionListener {
 				validate();
 			}
 		});
+		
+		highlighterChooser = new MatchRendererChooser(new MatchRendererChooser.RendererChooserListener() {
+			@Override
+			public void rendererChanged(MatchRenderer newRenderer) {
+				quickSearchPopup.setMatchRenderer(newRenderer);
+			}
+		});
+		quickSearchPopup.setMatchRenderer(highlighterChooser.getSelectedRenderer());
 	}
 	
 	private void setRowsToSearch() {
@@ -117,7 +127,11 @@ public class Example extends JFrame implements SelectionListener {
 						.addComponent(rowsToSearchLabel)
 						.addComponent(rowsToSearchScrollsPane)
 				)
-				.addComponent(fontChooser)
+				.addPreferredGap(RELATED)
+				.addGroup(layout.createParallelGroup()
+						.addComponent(highlighterChooser)
+						.addComponent(fontChooser)
+				)
 				.addPreferredGap(RELATED)				
 				.addGroup(layout.createSequentialGroup()
 						.addComponent(quickSearchLabel)						
@@ -135,7 +149,11 @@ public class Example extends JFrame implements SelectionListener {
 						.addComponent(rowsToSearchLabel)
 						.addComponent(rowsToSearchScrollsPane)
 				)
-				.addComponent(fontChooser)
+				.addGroup(layout.createSequentialGroup()
+						.addComponent(highlighterChooser)
+						.addPreferredGap(RELATED)
+						.addComponent(fontChooser)
+				)
 				.addGroup(layout.createParallelGroup()
 						.addComponent(quickSearchLabel)
 						.addComponent(quickSearchField)

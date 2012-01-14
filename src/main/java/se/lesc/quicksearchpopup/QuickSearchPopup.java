@@ -23,6 +23,8 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.JTextComponent;
 
+import se.lesc.quicksearchpopup.renderer.MatchRenderer;
+
 public class QuickSearchPopup implements SelectionListener {
 
 	private JTextComponent searchField;
@@ -34,6 +36,7 @@ public class QuickSearchPopup implements SelectionListener {
 	private SearchFieldEventListener searchFieldEventListener;
 	private ExternalEventListener externalEventListener;
 	private SelectionListener parentSelectionListener;
+	private MatchRenderer cellRenderer;
 
 	public QuickSearchPopup(JTextComponent searchField, SelectionListener selectionListener) {
 		this.searchField = searchField;
@@ -47,10 +50,7 @@ public class QuickSearchPopup implements SelectionListener {
 		externalEventListener = new ExternalEventListener();
 		searchFieldEventListener = new SearchFieldEventListener();
 		searchFieldEventListener.registerForEvents();
-		
-
 	}
-	
 	
 	protected void handleKey(KeyEvent e) {
 		int keyCode = e.getKeyCode();
@@ -61,8 +61,6 @@ public class QuickSearchPopup implements SelectionListener {
 			quickSearchPopupContent.dispatchEvent(e);
 		}
 	}
-
-
 
 	private void search() {
 
@@ -80,6 +78,9 @@ public class QuickSearchPopup implements SelectionListener {
     			}
     		}
     
+    		if (cellRenderer != null) {
+    			quickSearchPopupContent.setCellRenderer(cellRenderer);
+    		}
     		quickSearchPopupContent.setElements(searcher, searchString, matchedRows);
     		quickSearchPopupContent.prepareToShow();
     		show();
@@ -259,7 +260,7 @@ public class QuickSearchPopup implements SelectionListener {
 //			}
 			
 			if (event instanceof WindowEvent) {
-				WindowEvent windowEvent = (WindowEvent) event;
+//				WindowEvent windowEvent = (WindowEvent) event;
 //				System.out.println(windowEvent);
 				if (event.getID() == WindowEvent.WINDOW_LOST_FOCUS) {
 					hidePopup();
@@ -351,6 +352,11 @@ public class QuickSearchPopup implements SelectionListener {
 	public void rowSelected(String row) {
 		parentSelectionListener.rowSelected(row);
 		hidePopup();
+	}
+
+
+	public void setMatchRenderer(MatchRenderer newRenderer) {
+		this.cellRenderer = newRenderer;
 	}
 
 }

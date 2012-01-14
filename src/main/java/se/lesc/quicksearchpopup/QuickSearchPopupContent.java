@@ -21,7 +21,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.text.JTextComponent;
 
-//import static javax.swing.GroupLayout.DEFAULT_SIZE;
+import se.lesc.quicksearchpopup.renderer.BoldRenderer;
+import se.lesc.quicksearchpopup.renderer.MatchRenderer;
 
 @SuppressWarnings("serial")
 public class QuickSearchPopupContent extends JPanel {
@@ -32,7 +33,7 @@ public class QuickSearchPopupContent extends JPanel {
 	protected JButton addButton;
 	protected JTextComponent searchField;
 	protected Searcher searcher;
-	private HighlightedLettersListCellRenderer cellRenderer;
+	private MatchRenderer cellRenderer;
 	private SelectionListener selectionListener;
 	private String searchString;
 
@@ -58,9 +59,8 @@ public class QuickSearchPopupContent extends JPanel {
 				}
 			}
 		});
-		
 
-		cellRenderer = new HighlightedLettersListCellRenderer(list.getCellRenderer(), searcher);
+		cellRenderer = new BoldRenderer();
 		list.setCellRenderer(cellRenderer);
 		listScrollPane = new JScrollPane(list);
 		
@@ -83,8 +83,12 @@ public class QuickSearchPopupContent extends JPanel {
 				.addComponent(addButton)				
 		);
 		
-		setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.BLACK),
-				BorderFactory.createEmptyBorder(1, 1, 1, 1)));
+//		setBorder(BorderFactory.createCompoundBorder(BorderFactory.createLineBorder(Color.BLACK),
+//				BorderFactory.createEmptyBorder(1, 1, 1, 1)));
+		
+		listScrollPane.setBorder(null);
+		setBorder(BorderFactory.createLineBorder(Color.BLACK));
+//		setBorder(BorderFactory.createEtchedBorder(EtchedBorder.RAISED));
 	}
 	
 	@Override
@@ -112,7 +116,7 @@ public class QuickSearchPopupContent extends JPanel {
 		}
 		
 		this.searchString = searchString;
-		cellRenderer.setSearchString(searchString);
+		cellRenderer.setSearchInforomation(searchString, searcher);
 		
 //        //Increase speed of the list rendered (avoid size calculation on every cell)
 //		if (rows.size() > 0) {
@@ -125,6 +129,11 @@ public class QuickSearchPopupContent extends JPanel {
 		calculateSizes();
 	}
 
+	public void setCellRenderer(MatchRenderer cellRenderer) {
+		this.cellRenderer = cellRenderer;
+		list.setCellRenderer(cellRenderer);
+	}
+	
 	/** Calculates the preferred sizes */
 	public void calculateSizes() {
 		cellRenderer.setQuickRenderMode(true);
@@ -139,7 +148,7 @@ public class QuickSearchPopupContent extends JPanel {
 	        maxCellHeigth = Math.max(cellSize.height, maxCellHeigth);
 		}
 
-        
+		//TODO: move this code into BoldLettersRenderer
         //Add an approximate value for the bold font
         maxCellWidth += (int) (searchString.length() * 0.3);
         
