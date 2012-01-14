@@ -3,10 +3,13 @@ package se.lesc.quicksearchpopup;
 import java.applet.Applet;
 import java.awt.AWTEvent;
 import java.awt.Component;
+import java.awt.Container;
 import java.awt.Point;
 import java.awt.Toolkit;
 import java.awt.Window;
 import java.awt.event.AWTEventListener;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -41,14 +44,8 @@ public class QuickSearchPopup implements SelectionListener {
 
 
 		eventListener = new GlobalEventListener();
-
-//		searchField.addKeyListener(new KeyAdapter() {
-//			@Override
-//			public void keyTyped(KeyEvent e) {
-//				search(e);
-//			}
-//		});
 		
+		//TODO: make class to listen for searchField events
 		searchField.getDocument().addDocumentListener(new DocumentListener() {
 			@Override
 			public void removeUpdate(DocumentEvent e) {
@@ -72,7 +69,6 @@ public class QuickSearchPopup implements SelectionListener {
 				handleKey(e);
 			}
 		});
-	
 	}
 	
 	
@@ -172,6 +168,9 @@ public class QuickSearchPopup implements SelectionListener {
 
 	private class GlobalEventListener implements AWTEventListener {
 
+		private Window searchFieldWindow;
+		private ComponentAdapter searchFieldWindowComponentListener;
+
 		public void registerForEvents() {
 			final Toolkit toolkit = Toolkit.getDefaultToolkit();
 			java.security.AccessController.doPrivileged(
@@ -181,7 +180,7 @@ public class QuickSearchPopup implements SelectionListener {
 									AWTEvent.MOUSE_EVENT_MASK |
 									AWTEvent.MOUSE_MOTION_EVENT_MASK |
 									AWTEvent.MOUSE_WHEEL_EVENT_MASK |
-									AWTEvent.WINDOW_EVENT_MASK 
+									AWTEvent.WINDOW_EVENT_MASK
 //									AWTEvent.FOCUS_EVENT_MASK,
 //									AWTEvent.COMPONENT_EVENT_MASK
 									);
@@ -190,6 +189,20 @@ public class QuickSearchPopup implements SelectionListener {
 						}
 					}
 			);
+			
+			searchFieldWindow = findParentWindow(searchField);
+			searchFieldWindowComponentListener = new ComponentAdapter() {
+				@Override
+				public void componentResized(ComponentEvent e) {
+					hidePopup();
+				}
+
+				@Override
+				public void componentMoved(ComponentEvent e) {
+					hidePopup();
+				}
+			};			
+			searchFieldWindow.addComponentListener(searchFieldWindowComponentListener);
 		}
 
 		public void unRegisterForEvents() {
@@ -202,6 +215,7 @@ public class QuickSearchPopup implements SelectionListener {
 						}
 					}
 			);
+			searchFieldWindow.removeComponentListener(searchFieldWindowComponentListener);
 		}
 
 		@Override
@@ -220,6 +234,8 @@ public class QuickSearchPopup implements SelectionListener {
 //				System.out.println(windowEvent);
 				if (event.getID() == WindowEvent.WINDOW_LOST_FOCUS) {
 					hidePopup();
+//				} else {
+//					System.out.println(windowEvent);
 				}
 			}
 
@@ -293,5 +309,18 @@ public class QuickSearchPopup implements SelectionListener {
 		parentSelectionListener.rowSelected(row);
 		hidePopup();
 		
+	}
+	
+	private static Window findParentWindow(Component component) {
+		if (component instanceof Window) {
+			return (Window) component;
+		} else {
+			Container parent = component.getParent();
+			if (parent == null) {
+				return null;
+			} else {
+				return findParentWindow(parent);
+			}
+		}
 	}
 }
