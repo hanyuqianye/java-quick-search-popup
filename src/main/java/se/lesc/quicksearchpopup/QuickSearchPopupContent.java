@@ -59,7 +59,7 @@ public class QuickSearchPopupContent extends JPanel {
 			}
 		});
 		
-		list.setFont(searchField.getFont());
+
 		cellRenderer = new HighlightedLettersListCellRenderer(list.getCellRenderer(), searcher);
 		list.setCellRenderer(cellRenderer);
 		listScrollPane = new JScrollPane(list);
@@ -120,9 +120,13 @@ public class QuickSearchPopupContent extends JPanel {
 //		}
 	}
 
+	public void prepareToShow() {
+		list.setFont(searchField.getFont());
+		calculateSizes();
+	}
+
 	/** Calculates the preferred sizes */
 	public void calculateSizes() {
-		
 		cellRenderer.setQuickRenderMode(true);
 		int maxCellWidth = 0; 
 		int maxCellHeigth = 0; 
@@ -147,8 +151,6 @@ public class QuickSearchPopupContent extends JPanel {
         //Fixing so that the popup is equal the width of the text search field
         int parentComponentWidth = searchField.getSize().width;
         setPreferredSize(new Dimension(parentComponentWidth, getPreferredSize().height));
-        
-        
 	}
 
 }

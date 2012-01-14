@@ -81,7 +81,7 @@ public class QuickSearchPopup implements SelectionListener {
     		}
     
     		quickSearchPopupContent.setElements(searcher, searchString, matchedRows);
-    		quickSearchPopupContent.calculateSizes();
+    		quickSearchPopupContent.prepareToShow();
     		show();
 		}
 	}

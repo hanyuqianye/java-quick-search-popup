@@ -38,6 +38,8 @@ public class Example extends JFrame implements SelectionListener {
 	private JLabel addedRowsLabel;
 	private JTextArea addedRows;
 	private JScrollPane addedRowsScrollsPane;
+	
+	private FontChooser fontChooser;
 
 	private String[] rows;
 
@@ -60,13 +62,20 @@ public class Example extends JFrame implements SelectionListener {
 		quickSearchLabel = new JLabel("Quick Search:");
 		quickSearchField = new JTextField(15);
 		quickSearchField.setToolTipText("Write search word, separated with spaces");
-//		quickSearchField.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 13));
 
 		quickSearchPopup = new QuickSearchPopup(quickSearchField, this);
 		
 		addedRowsLabel = new JLabel("Selected rows:");
 		addedRows = new JTextArea(10, 80);
 		addedRowsScrollsPane = new JScrollPane(addedRows);
+		
+		fontChooser = new FontChooser(new FontChooser.FontChangedLister() {
+			@Override
+			public void fontChanged(Font newFont) {
+				quickSearchField.setFont(newFont);
+				validate();
+			}
+		});
 	}
 	
 	private void setRowsToSearch() {
@@ -108,6 +117,7 @@ public class Example extends JFrame implements SelectionListener {
 						.addComponent(rowsToSearchLabel)
 						.addComponent(rowsToSearchScrollsPane)
 				)
+				.addComponent(fontChooser)
 				.addPreferredGap(RELATED)				
 				.addGroup(layout.createSequentialGroup()
 						.addComponent(quickSearchLabel)						
@@ -124,7 +134,8 @@ public class Example extends JFrame implements SelectionListener {
 				.addGroup(layout.createParallelGroup()
 						.addComponent(rowsToSearchLabel)
 						.addComponent(rowsToSearchScrollsPane)
-				)				
+				)
+				.addComponent(fontChooser)
 				.addGroup(layout.createParallelGroup()
 						.addComponent(quickSearchLabel)
 						.addComponent(quickSearchField)
