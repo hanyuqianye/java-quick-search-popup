@@ -26,7 +26,6 @@ import se.lesc.quicksearchpopup.SelectionListener;
 public class Example extends JFrame implements SelectionListener {
 
 	private GroupLayout layout = new GroupLayout(this.getContentPane());
-
 	
 	private JLabel rowsToSearchLabel;
 	private JTextArea rowsToSearch;
@@ -34,7 +33,7 @@ public class Example extends JFrame implements SelectionListener {
 		
 	private JLabel quickSearchLabel;
 	private JTextField quickSearchField; 
-	private QuickSearchPopup quickSearcher;
+	private QuickSearchPopup quickSearchPopup;
 	
 	private JLabel addedRowsLabel;
 	private JTextArea addedRows;
@@ -63,7 +62,7 @@ public class Example extends JFrame implements SelectionListener {
 		quickSearchField.setToolTipText("Write search word, separated with spaces");
 //		quickSearchField.setFont(new Font(Font.MONOSPACED, Font.PLAIN, 13));
 
-		quickSearcher = new QuickSearchPopup(quickSearchField, this);
+		quickSearchPopup = new QuickSearchPopup(quickSearchField, this);
 		
 		addedRowsLabel = new JLabel("Selected rows:");
 		addedRows = new JTextArea(10, 80);
@@ -74,7 +73,7 @@ public class Example extends JFrame implements SelectionListener {
 		String exampleData = getExampleData();
 		rows = exampleData.split("\n");
 		
-		quickSearcher.setSearchRows(rows);
+		quickSearchPopup.setSearchRows(rows);
 		rowsToSearch.setText(exampleData);
 		rowsToSearch.setCaretPosition(0);
 	}

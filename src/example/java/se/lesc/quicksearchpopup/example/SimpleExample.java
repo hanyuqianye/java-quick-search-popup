@@ -24,8 +24,8 @@ public class SimpleExample extends JFrame implements SelectionListener {
 		super("java-quick-search-popup simple example");
 		
 		JTextField quickSearchField = new JTextField(40);
-		QuickSearchPopup quickSearcher = new QuickSearchPopup(quickSearchField, this);
-		quickSearcher.setSearchRows(rowsToSearch);
+		QuickSearchPopup quickSearchPopup = new QuickSearchPopup(quickSearchField, this);
+		quickSearchPopup.setSearchRows(rowsToSearch);
 
 		add(quickSearchField);
 		
