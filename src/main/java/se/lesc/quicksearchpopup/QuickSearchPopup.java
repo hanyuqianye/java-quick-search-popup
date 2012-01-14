@@ -12,6 +12,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
@@ -30,7 +31,8 @@ public class QuickSearchPopup implements SelectionListener {
 	private Searcher searcher;
 	private Popup popup;
 	private QuickSearchPopupContent quickSearchPopupContent;
-	private GlobalEventListener eventListener;
+	private SearchFieldEventListener searchFieldEventListener;
+	private ExternalEventListener externalEventListener;
 	private SelectionListener parentSelectionListener;
 
 	public QuickSearchPopup(JTextComponent searchField, SelectionListener selectionListener) {
@@ -42,33 +44,11 @@ public class QuickSearchPopup implements SelectionListener {
 
 		createComponents();
 
-
-		eventListener = new GlobalEventListener();
+		externalEventListener = new ExternalEventListener();
+		searchFieldEventListener = new SearchFieldEventListener();
+		searchFieldEventListener.registerForEvents();
 		
-		//TODO: make class to listen for searchField events
-		searchField.getDocument().addDocumentListener(new DocumentListener() {
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-				search();
-			}
-			
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				search();
-			}
-			
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-				search();
-			}
-		});
 
-		searchField.addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				handleKey(e);
-			}
-		});
 	}
 	
 	
@@ -123,7 +103,7 @@ public class QuickSearchPopup implements SelectionListener {
 //				searchField.getSize().width,
 //						quickSearchPopupContent.getPreferredSize().height));
 		
-		eventListener.registerForEvents();
+		externalEventListener.registerForEvents();
 
 		//		quickSearcherList.addFocusListener(new FocusListener() {
 		//
@@ -154,7 +134,7 @@ public class QuickSearchPopup implements SelectionListener {
 
 	private void hidePopup() {
 		if (popup != null) {
-			eventListener.unRegisterForEvents();
+			externalEventListener.unRegisterForEvents();
 			popup.hide();
 
 			popup = null;
@@ -166,9 +146,61 @@ public class QuickSearchPopup implements SelectionListener {
 		this.rows = rows;
 	}
 
-	private class GlobalEventListener implements AWTEventListener {
+	
+	/**
+	 * This class is responsible to handle every event the user does inside the search field that
+	 * could cause a change of the popup. For example if the user presses a key the popup should be
+	 * shown and a search executed.
+	 */
+	private class SearchFieldEventListener {
+		
+		DocumentListener documentListener;
+		KeyListener keyListener;
+		
+		public void registerForEvents() {
+			documentListener =  new DocumentListener() {
+				@Override
+				public void removeUpdate(DocumentEvent e) {
+					search();
+				}
+				
+				@Override
+				public void insertUpdate(DocumentEvent e) {
+					search();
+				}
+				
+				@Override
+				public void changedUpdate(DocumentEvent e) {
+					search();
+				}
+			};
+			searchField.getDocument().addDocumentListener(documentListener);
+			
+			keyListener = new KeyAdapter() {
+				@Override
+				public void keyPressed(KeyEvent e) {
+					handleKey(e);
+				}
+			};
+			searchField.addKeyListener(keyListener);
+		}
+		
+		//TODO: not sure when to call this method.
+		public void unRegisterForEvents() {
+			searchField.getDocument().removeDocumentListener(documentListener);
+			searchField.removeKeyListener(keyListener);
+		}
+	}
+	
+	/**
+	 * This class is responsible to hide the popup in case of an external event that should close
+	 * the popup. For example if the Window is minimized or the user clicks outside of the popup.
+	 */
+	private class ExternalEventListener implements AWTEventListener {
 
+		/** The Windows object the the searchField resides in */
 		private Window searchFieldWindow;
+
 		private ComponentAdapter searchFieldWindowComponentListener;
 
 		public void registerForEvents() {
@@ -176,15 +208,12 @@ public class QuickSearchPopup implements SelectionListener {
 			java.security.AccessController.doPrivileged(
 					new java.security.PrivilegedAction<Void>() {
 						public Void run() {
-							toolkit.addAWTEventListener(GlobalEventListener.this,
+							toolkit.addAWTEventListener(ExternalEventListener.this,
 									AWTEvent.MOUSE_EVENT_MASK |
 									AWTEvent.MOUSE_MOTION_EVENT_MASK |
 									AWTEvent.MOUSE_WHEEL_EVENT_MASK |
 									AWTEvent.WINDOW_EVENT_MASK
-//									AWTEvent.FOCUS_EVENT_MASK,
-//									AWTEvent.COMPONENT_EVENT_MASK
 									);
-//							toolkit.addAWTEventListener(GlobalEventListener.this, 0xffffffffffffffffL);							
 							return null;
 						}
 					}
@@ -210,7 +239,7 @@ public class QuickSearchPopup implements SelectionListener {
 			java.security.AccessController.doPrivileged(
 					new java.security.PrivilegedAction<Void>() {
 						public Void run() {
-							toolkit.removeAWTEventListener(GlobalEventListener.this);
+							toolkit.removeAWTEventListener(ExternalEventListener.this);
 							return null;
 						}
 					}
@@ -302,25 +331,26 @@ public class QuickSearchPopup implements SelectionListener {
 			return false;
 		}
 
+		
+		
+		private Window findParentWindow(Component component) {
+			if (component instanceof Window) {
+				return (Window) component;
+			} else {
+				Container parent = component.getParent();
+				if (parent == null) {
+					return null;
+				} else {
+					return findParentWindow(parent);
+				}
+			}
+		}
 	}
 
 	@Override
 	public void rowSelected(String row) {
 		parentSelectionListener.rowSelected(row);
 		hidePopup();
-		
 	}
-	
-	private static Window findParentWindow(Component component) {
-		if (component instanceof Window) {
-			return (Window) component;
-		} else {
-			Container parent = component.getParent();
-			if (parent == null) {
-				return null;
-			} else {
-				return findParentWindow(parent);
-			}
-		}
-	}
+
 }
