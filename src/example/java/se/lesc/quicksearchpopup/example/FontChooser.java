@@ -52,8 +52,6 @@ public class FontChooser extends JPanel implements ActionListener {
 		
 		fontChooserComboBox.addActionListener(this);
 		fontSizeComboBox.addActionListener(this);
-		
-		System.out.println(defaultFont);
 	}
 	
 	private Integer[] getFontSizes() {
