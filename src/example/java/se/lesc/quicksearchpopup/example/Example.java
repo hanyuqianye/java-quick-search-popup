@@ -53,6 +53,7 @@ public class Example extends JFrame implements SelectionListener {
 		initLayout();
 		pack();
 		setLocationRelativeTo(null); //Center on screen
+		quickSearchField.requestFocus();
 	}
 
 	private void initComponents() {
