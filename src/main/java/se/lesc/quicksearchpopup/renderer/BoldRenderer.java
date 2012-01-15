@@ -5,7 +5,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
 
-import javax.swing.JLabel;
 import javax.swing.JList;
 
 /**
@@ -31,7 +30,14 @@ public class BoldRenderer extends MatchRenderer {
 		}
 	}
     
-	private int calculateExtraWidth(JList list) {
+	/**
+	 * Calculates how much mode space should be allocated becuase of a bold font. A bold font
+	 * typically has a large width than a plain font. In some cases (for example capital
+	 * 'F') the bold font is narrower.
+	 * @param list The list, used to get the font
+	 * @return number of pixels to add to the width
+	 */
+	private int calculateBoldFontWidthDifference(JList list) {
 		Font font = list.getFont();
 		FontMetrics fontMetrics =  list.getFontMetrics(font);
 		
@@ -40,23 +46,28 @@ public class BoldRenderer extends MatchRenderer {
 		
 		//Calculate a new extra size for the bold font
 		int extraWidth = boldFontMetrics.stringWidth(searchString) - fontMetrics.stringWidth(searchString);
+		
+		//Add some extra width just to be sure (since capital letters take less space in bold)
+		extraWidth += (int) (searchString.length() * 0.5);
 		return extraWidth;
 	}
 
     @Override
     public Component getListCellRendererComponent(JList list, Object value, int index,
         boolean isSelected, boolean cellHasFocus) {
-//    	((JLabel) defaultRenderer).setPreferredSize(null);
-        Component component = defaultRenderer.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+
+    	//Reset the preferred width so that the component may recalculate it
+    	defaultRenderer.setPreferredSize(null); 
+        
+    	Component component = defaultRenderer.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
 
         if (quickRenderMode) {
-        	
         	if (extraCellWidth == null) {
-        		extraCellWidth = calculateExtraWidth(list);
-//            	System.out.println(extraCellWidth);
+        		extraCellWidth = calculateBoldFontWidthDifference(list);
+            	System.out.println(extraCellWidth);
             	Dimension componentPreferredSize = component.getPreferredSize();
-            	
-            	//TODO: does not work very well, the extra width is added for every time the size is calculated
+            
+            	//Change the preferred width by adding the extra space the bold font takes
             	component.setPreferredSize(new Dimension(
             			componentPreferredSize.width + extraCellWidth,
                 		componentPreferredSize.height));
@@ -102,8 +113,7 @@ public class BoldRenderer extends MatchRenderer {
     		sb.append(row.substring(matches[matches.length - 1][1], row.length()));
     		sb.append("</html>");
 
-    		//If the originalRenderer is not a subtype of JLabel we have a problem
-    		((JLabel) defaultRenderer).setText(sb.toString());
+    		defaultRenderer.setText(sb.toString());
     	}
 
     	return component;

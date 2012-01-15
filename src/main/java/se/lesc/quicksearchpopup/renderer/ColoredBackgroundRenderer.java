@@ -2,8 +2,6 @@ package se.lesc.quicksearchpopup.renderer;
 
 import java.awt.Component;
 
-import javax.swing.JLabel;
-
 /**
  * Renders a a colored background for every part of the row that matches the search string.
  */ 
@@ -37,8 +35,7 @@ public class ColoredBackgroundRenderer extends MatchRenderer {
     		sb.append(row.substring(matches[matches.length - 1][1], row.length()));
     		sb.append("</html>");
 
-    		//If the originalRenderer is not a subtype of JLabel we have a problem
-    		((JLabel) defaultRenderer).setText(sb.toString());
+    		defaultRenderer.setText(sb.toString());
     	}
 
     	return component;

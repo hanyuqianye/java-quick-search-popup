@@ -2,6 +2,8 @@ package se.lesc.quicksearchpopup.renderer;
 
 import java.awt.Component;
 
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
@@ -12,14 +14,22 @@ import se.lesc.quicksearchpopup.Searcher;
  */
 public abstract class MatchRenderer implements ListCellRenderer {
 	
-    protected ListCellRenderer defaultRenderer;
+    protected DefaultListCellRenderer defaultRenderer;
 
     protected String searchString;
     protected Searcher searcher;
     protected boolean quickRenderMode = false;
 
     public MatchRenderer() {
-    	this.defaultRenderer = new JList().getCellRenderer();
+    	ListCellRenderer renderer = new JList().getCellRenderer();
+    	if (renderer instanceof JLabel) {
+    		defaultRenderer = (DefaultListCellRenderer) renderer;
+    	} else {
+    		//Something is a bit different on this platform. Since all the subclasses require a 
+    		//JLabel and ListCellRenderer a new DefaultListCellRenderer is created
+    		defaultRenderer = new DefaultListCellRenderer();
+    	}
+    	
     }
     
     /**
