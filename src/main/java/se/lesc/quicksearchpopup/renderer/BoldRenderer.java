@@ -64,7 +64,6 @@ public class BoldRenderer extends MatchRenderer {
         if (quickRenderMode) {
         	if (extraCellWidth == null) {
         		extraCellWidth = calculateBoldFontWidthDifference(list);
-            	System.out.println(extraCellWidth);
             	Dimension componentPreferredSize = component.getPreferredSize();
             
             	//Change the preferred width by adding the extra space the bold font takes
