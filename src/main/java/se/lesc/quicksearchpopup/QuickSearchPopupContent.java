@@ -21,7 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.text.JTextComponent;
 
-import se.lesc.quicksearchpopup.renderer.BoldRenderer;
+import se.lesc.quicksearchpopup.renderer.ColoredBackgroundRenderer;
 import se.lesc.quicksearchpopup.renderer.MatchRenderer;
 
 @SuppressWarnings("serial")
@@ -33,9 +33,9 @@ public class QuickSearchPopupContent extends JPanel {
 	protected JButton addButton;
 	protected JTextComponent searchField;
 	protected Searcher searcher;
-	private MatchRenderer cellRenderer;
-	private SelectionListener selectionListener;
-	private String searchString;
+	protected MatchRenderer cellRenderer;
+	protected SelectionListener selectionListener;
+	protected String searchString;
 
 	public QuickSearchPopupContent(JTextComponent searchField, Searcher searcher, SelectionListener selectionListener) {
 		this.searchField = searchField;
@@ -60,7 +60,7 @@ public class QuickSearchPopupContent extends JPanel {
 			}
 		});
 
-		cellRenderer = new BoldRenderer();
+		cellRenderer = new ColoredBackgroundRenderer();
 		list.setCellRenderer(cellRenderer);
 		listScrollPane = new JScrollPane(list);
 		
@@ -135,7 +135,7 @@ public class QuickSearchPopupContent extends JPanel {
 	}
 	
 	/** Calculates the preferred sizes */
-	public void calculateSizes() {
+	protected void calculateSizes() {
 		cellRenderer.setQuickRenderMode(true);
 		int maxCellWidth = 0; 
 		int maxCellHeigth = 0; 
@@ -147,10 +147,6 @@ public class QuickSearchPopupContent extends JPanel {
 	        maxCellWidth = Math.max(cellSize.width, maxCellWidth);
 	        maxCellHeigth = Math.max(cellSize.height, maxCellHeigth);
 		}
-
-		//TODO: move this code into BoldLettersRenderer
-        //Add an approximate value for the bold font
-        maxCellWidth += (int) (searchString.length() * 0.3);
         
         list.setFixedCellHeight(maxCellHeigth);
         list.setFixedCellWidth(maxCellWidth);
