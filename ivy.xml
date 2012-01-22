@@ -24,6 +24,8 @@
 	</publications>
 
 	<dependencies>
+		<!-- Example depencencies -->
+		<dependency org="commons-io" name="commons-io" rev="2.1" conf="example->master" />
 
 		<!-- Test depencencies -->
 		<dependency org="junit" name="junit" rev="4.10" conf="test->master"/>
